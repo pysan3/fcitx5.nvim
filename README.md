@@ -8,10 +8,10 @@ The input method specified when calling `setup` is set as default.
 
 ## Requirements
 
-**`fcitx5` is highly recommended but `fcitx` should work as well.**
+**This plugin does NOT work with `fcitx`. Only works with `fcitx5`.**
 
-- This plugin requires neovim >= 0.5.0
-- `fcitx5-remote` or `fcitx-remote`
+- This plugin requires `nvim v0.8+`
+- `fcitx5-remote`
 
 ## Installation
 
