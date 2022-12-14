@@ -22,7 +22,7 @@ require("packer").startup(function(use)
   use({ "pysan3/fcitx5.nvim" })
 
   -- If you want to lazy load...
-  use({ "pysan3/fcitx5.nvim", event = { "InsertEnter", "CmdlineEnter" } })
+  use({ "pysan3/fcitx5.nvim", event = { "ModeChanged" } })
 end)
 ```
 
@@ -31,3 +31,12 @@ end)
 - [fcitx.vim](https://github.com/lilydjwg/fcitx.vim)
 - [fcitx.nvim](https://github.com/h-hg/fcitx.nvim)
 - [vim-barbaric](https://github.com/rlue/vim-barbaric)
+
+## Credits
+
+- [lualine.nvim](https://github.com/nvim-lualine/lualine.nvim)
+  - Provided me the code to check the current mode.
+
+## License
+
+All files in this repository without annotation are licensed under the MIT license as detailed in [LICENSE](./LICENSE).
