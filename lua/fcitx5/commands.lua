@@ -76,7 +76,7 @@ end
 
 M.Fcitx5GetImname = function(mode)
   local imname = get_mode_imname(M.prior, mode)
-  if config.prioritize_prior and imname ~= nil then
+  if config.remember_prior and imname ~= nil then
     return imname
   end
   return get_mode_imname(config.imname, mode)

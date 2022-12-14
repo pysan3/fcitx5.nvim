@@ -2,37 +2,21 @@ local config = require("fcitx5.config")
 
 local M = {}
 
-M.log_level = function(level)
-  local levels = {
-    "trace",
-    "debug",
-    "info",
-    "warn",
-    "error",
-  }
+M.log_level_int = function(level)
   if type(level) == "number" then
-    return level
-  elseif level == nil then
     return 0
   end
-  for i, v in ipairs(levels) do
-    if level == v then
-      return i
-    end
-  end
-  return 0
+  return vim.log.levels[string.upper(level or "info")]
 end
 
 ---echos `msg` as a vim.notify
 ---@param msg string: message to notify
 ---@param level integer | string | nil: ("info", "warn", "error"), if nil, "info" is used
----@param ... any: Any options to pass to vim.notify
-M.echo = function(msg, level, ...)
-  if level == nil or type(level) == "string" then
-    level = vim.log.levels[string.upper(level or "info")]
-  end
-  if M.log_level(config.log) <= M.log_level(level) then
-    vim.notify(msg, level, ...)
+---@param opts table?: Any options to pass to vim.notify
+M.echo = function(msg, level, opts)
+  local level_int = M.log_level_int(level)
+  if M.log_level_int(config.log) <= level_int then
+    vim.notify(msg, level_int, opts or {})
   end
 end
 

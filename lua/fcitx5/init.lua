@@ -10,15 +10,44 @@ local function setup_vim_commands()
     require("fcitx5").help()
   end, { desc = "[pysan3/fcitx5.nvim] Fcitx5 help" })
   vim.api.nvim_create_user_command("Fcitx5SetName", function(opts)
+    if #opts.fargs < 1 then
+      require("fcitx5").error("<Cmd>Fcitx5SetName requires one argument `imname`.")
+      require("fcitx5").help()
+      return
+    end
     local imname = opts.fargs[1]
     require("fcitx5").Fcitx5SetName(imname)
-  end, { desc = "[pysan3/fcitx5.nvim] Fcitx5SetName <imname>" })
+  end, { desc = "[pysan3/fcitx5.nvim] Fcitx5SetName <imname>", nargs = 1 })
   vim.api.nvim_create_user_command("Fcitx5Geneious", function(_)
     require("fcitx5").Fcitx5Geneious()
   end, { desc = "[pysan3/fcitx5.nvim] Fcitx5Geneious" })
   vim.api.nvim_create_user_command("Fcitx5OnModeChanged", function(_)
     require("fcitx5").Fcitx5OnModeChanged()
   end, { desc = "[pysan3/fcitx5.nvim] Fcitx5OnModeChanged" })
+  vim.api.nvim_create_user_command("Fcitx5SetPrior", function(opts)
+    local mode, imname
+    if #opts.fargs == 1 then
+      mode, imname = nil, opts.fargs[1]
+    elseif #opts.fargs == 2 then
+      mode, imname = opts.fargs[2], opts.fargs[1]
+    else
+      require("fcitx5").error("<Cmd>Fcitx5SetPrior requires one or two arguments `imname` `mode?`.")
+      require("fcitx5").help()
+      return
+    end
+    require("fcitx5").Fcitx5SetPrior(mode, imname)
+  end, { desc = "[pysan3/fcitx5.nvim] Fcitx5SetPrior", nargs = "*" })
+  vim.api.nvim_create_user_command("Fcitx5GetImname", function(opts)
+    local mode = #opts.fargs >= 1 and opts.fargs[1] or nil
+    local result = require("fcitx5").Fcitx5GetImname(mode)
+    print(result)
+    return result
+  end, { desc = "[pysan3/fcitx5.nvim] Fcitx5GetImname <mode>", nargs = "?" })
+  vim.api.nvim_create_user_command("Fcitx5GetImnames", function(_)
+    local result = require("fcitx5").Fcitx5GetImnames()
+    vim.pretty_print(result)
+    return result
+  end, { desc = "[pysan3/fcitx5.nvim] Fcitx5GetImnames" })
 end
 
 local function setup_vim_autocmds()
