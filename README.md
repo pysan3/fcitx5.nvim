@@ -60,6 +60,7 @@ require("fcitx5").setup({
   remember_prior = true, -- boolean: if true, it remembers the mode on exit and restore it when entering the mode again.
   --                                 if false, uses what was set in config.
   define_autocmd = true, -- boolean: if true, defines autocmd at `ModeChanged` to switch fcitx5 mode.
+  autostart_fcitx5 = true, -- boolean: if true, autostarts `fcitx5` when it is not running.
   log = "warn", -- string: log level (default: warn)
 })
 ```
