@@ -3,6 +3,7 @@
 ---@field imname fcitx5.Imname | nil: imnames on each mode set as prior. See `:h map-table` for more in-depth information.
 ---@field remember_prior boolean: if true, load the mode from last time. if false, use what was set in setup.
 ---@field define_autocmd boolean: if true, defines autocmd at `ModeChanged` to switch fcitx5 mode.
+---@field autostart_fcitx5 boolean: if true, autostarts `fcitx5` when it is not running.
 ---@field log string: log level (default: warn)
 
 ---@type fcitx5.Config
@@ -20,6 +21,7 @@ local DEFAULT_OPTS = {
   },
   remember_prior = true,
   define_autocmd = true,
+  autostart_fcitx5 = true,
   log = "warn",
 }
 

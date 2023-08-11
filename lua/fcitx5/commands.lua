@@ -16,14 +16,14 @@ local mode_util = require("fcitx5.mode_util")
 local M = {
   fcitx5_command = nil,
   ---@type fcitx5.Imname
-  prior = {}
+  prior = {},
 }
 
 ---Return `fcitx5-remote` command if possible
 ---@return string: "fcitx5-remote " (<space> at the end)
 local function fcitx5_command()
   if M.fcitx5_command == nil then
-    if vim.fn.executable('fcitx5-remote') == 1 then
+    if vim.fn.executable("fcitx5-remote") == 1 then
       M.fcitx5_command = "fcitx5-remote"
     else
       lib.error("fcitx5-remote not found.")
@@ -91,6 +91,10 @@ M.Fcitx5GetImnames = function()
   return result
 end
 
+M.is_fcitx5_running = function()
+  return string.len(vim.fn.system("command ps -A | command grep fcitx5")) > 0
+end
+
 ---Fcitx5UpdateMethod
 -- Set the imname to `imname`
 ---@param imname string | nil: e.g. "keyboard-us", if nil, only updates M.prior
@@ -100,6 +104,7 @@ end
 M.Fcitx5UpdateMethod = function(imname, old_mode, new_mode)
   lib.info(string.format("Fcitx5SetName: imname: %s, old_mode: %s, new_mode: %s", imname, old_mode, new_mode))
   local function run(...)
+    -- stylua: ignore
     local command = table.concat(vim.tbl_map(function(a)
       return fcitx5_command() .. a
     end, { "-n", ..., "-n" }), "; ")
@@ -107,6 +112,9 @@ M.Fcitx5UpdateMethod = function(imname, old_mode, new_mode)
     return vim.split(vim.fn.system(command), "\n", { trimempty = true })
   end
 
+  if not config.autostart_fcitx5 and not M.is_fcitx5_running() then -- abort when fcitx5 is not running
+    return {}
+  end
   local result = imname ~= nil and run("-s " .. imname) or run("")
   local previous_imname, current_imname = table.remove(result, 1), table.remove(result)
   if old_mode ~= nil then
@@ -115,6 +123,7 @@ M.Fcitx5UpdateMethod = function(imname, old_mode, new_mode)
   if new_mode ~= nil then
     M.Fcitx5SetPrior(new_mode, current_imname)
   end
+  -- stylua: ignore
   lib.info(string.format("Mode changed (%s -> %s). Changed input method (%s -> %s).",
     old_mode, new_mode, previous_imname, current_imname))
   return result
